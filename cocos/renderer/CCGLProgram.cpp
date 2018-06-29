@@ -348,16 +348,17 @@ void GLProgram::parseVertexAttribs()
     // Query and store vertex attribute meta-data from the program.
     GLint activeAttributes;
     GLint length;
+    //从OPENGL里获取保存的属性数组长度activeAttributes
     glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTES, &activeAttributes);
     if(activeAttributes > 0)
     {
-        VertexAttrib attribute;
-
+        VertexAttrib attribute;//COCOS自定义保存属性的结构
+        //GL_ACTIVE_ATTRIBUTE_MAX_LENGTH意思是获取最长数据的字节数，即length
         glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length);
         if(length > 0)
         {
             GLchar* attribName = (GLchar*) alloca(length + 1);
-
+            //根据长度，获取属性值
             for(int i = 0; i < activeAttributes; ++i)
             {
                 // Query attribute info.
