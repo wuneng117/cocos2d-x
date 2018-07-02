@@ -1257,7 +1257,10 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
+    // 复制1个MATRIX_STACK_MODELVIEW？
     _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    // _modelViewTransform是世界坐标转换矩阵，这句相当于把MATRIX_STACK_MODELVIEW设置为了_modelViewTransform
+    // _modelViewTransform在processParentFlags计算过了
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     
     bool visibleByCamera = isVisitableByVisitingCamera();
@@ -1288,7 +1291,7 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
+    // 删掉用过的MATRIX_STACK_MODELVIEW
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
     // FIX ME: Why need to set _orderOfArrival to 0??
